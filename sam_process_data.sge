@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+#$ -S /bin/bash
+#$ -e /nefs/sll16/s2000_data/sgetmp
+#$ -o /nefs/sll16/s2000_data/sgetmp
+##$ -j y
+#$ -V
+#$ -cwd
+##$ -l mem_free=4G
+##$ -l num_proc=4
+##$ -t 1-384
+#$ -t 1
+#
+
+files=(`find . -name 'qEI*.dat' -printf '%P\n'`);
+dirs=(`find /nefs/sll16/s2000_data/ -name 'qEI*.dat' -printf '%p\n' | xargs -n 1 dirname`);
+
+TASK_ID=$(($SGE_TASK_ID-1));
+cd "${dirs[$TASK_ID]}";
+pwd;
+echo ${files[$TASK_ID]};
+matlab -nojvm -nodisplay -r "addpath('/nefs/ncr2/ProcessArfiData/v1.2/'); ProcessArfiData('${files[$TASK_ID]}','loupasM',2);"

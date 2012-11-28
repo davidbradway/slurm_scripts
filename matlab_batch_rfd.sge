@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+#$ -S /bin/bash
+#$ -e /nefs/sjr6/sgetmp
+#$ -o /nefs/sjr6/sgetmp
+#$ -j y
+#$ -V
+#$ -cwd
+#$ -l mem_free=2G
+##$ -l num_proc=4
+#$ -t 1-2
+#
+
+pre_interp_factor=5
+kernel_length=25
+files=(0 uri_SpV986_VpF3964_FpA2_20090106095308.rfd
+uri_SpV986_VpF3964_FpA2_20090106103312.rfd)
+
+matlab -nojvm -nodisplay -r
+"addpath('/data/sjr6/matlab/arfi_pkg/wip/disp_est');addpath('/data/sjr6/matl
+ab/arfi_pkg/wip/uriReader');filename='${files[$SGE_TASK_ID]}';computeParalle
+lARFI(filename,'ac',${pre_interp_factor},${kernel_length});
+startidx=max(strfind(filename,'_'));endidx=max(strfind(filename,'.rfd'));dis
+pfile=cat(2, 'displacement_f_', filename(startidx+1:endidx-1),
+'*');dispfile=dir(dispfile);dispfile=dispfile.name;unwrap_parallel(dispfile,
+1);"
+

@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+"""
+(1) Creates the SGE output/error directory if it doesn't exist.
+(2) Launches the SGE job script.
+
+To make this really useful, you'll need to have public key ssh authentication
+setup.  I've put details on how to do this on the lab wiki:
+https://rocky.bme.duke.edu/ultrasound/ssh
+
+USAGE: qsub job_script.sge
+"""
+
+__author__ = "Mark Palmeri"
+__email__ = "mark.palmeri@duke.edu"
+__date__ = "2009-11-11"
+"""
+=================================================================================
+Revision History
+=================================================================================
+[mlp6, 2009-07-13] Original code
+[mlp6, 2009-11-11] Revised to take qsub commandline options
+[mlp6, 2012-11-28] Revised to take qsub commandline options
+=================================================================================
+"""
+
+import os
+import sys
+import re
+
+def usage():
+    print "USAGE: qsub qsub_options job_script.sge"
+
+# make sure we have the bare minimum on the commandline
+if len(sys.argv) < 2:
+    print "ERROR: No SGE job script was specified."
+    usage()
+    sys.exit()
+
+# pull out the SGE options and the job 
+SGE_OPTIONS = sys.argv[1:-1]
+SGE_JOB = sys.argv[-1]
+
+# define the current working directory
+CWD = os.getcwd()
+
+# test to make sure that the SGE job script exists
+if not os.path.exists(SGE_JOB):
+    print "ERROR: %s does not exist" % SGE_JOB
+    sys.exit()
+
+# extract the output/error directory specified in the job file (assuming they are the same!!)
+#SGE_JOB_FILE = open(SGE_JOB,'r')
+#for i in SGE_JOB_FILE:
+#    if re.match("#\$ -o",i):
+#        SGE_TMP_DIR = i.split()[-1]
+# MODIFIED ON 2012-11-28 to now just define 'sgetmp' as the common output / error directory
+SGE_TMP_DIR = "sgetmp"
+# create the SGE tmp directory if it doesn't exist
+if not os.path.isdir(SGE_TMP_DIR):
+    os.mkdir(SGE_TMP_DIR)
+    print "SGE output/error directory created: %s" % SGE_TMP_DIR
+
+# define the ssh commandline to execute
+SSH_CMD = "cd %s; qsub -S /bin/bash -o %s -e %s -V -cwd -m aes -M mlp6@duke.edu %s %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, ' '.join(SGE_OPTIONS), SGE_JOB)
+
+# run the ssh command
+os.system("ssh hogwarts.egr.duke.edu '%s'" % SSH_CMD)

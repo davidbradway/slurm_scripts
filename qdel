@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""
+Remove a running/queued SGE job from the cluster.
+
+USAGE: qdel [OPTIONS]
+"""
+
+__author__ = "Mark Palmeri (mlp6)"
+__email__ = "mark.palmeri@duke.edu"
+__date__ = "2010-04-20"
+
+import sys
+import os
+
+def usage():
+    print "USAGE: qdel TASK_ID"
+
+if len(sys.argv) > 1:
+    QDEL_OPTIONS = " ".join(sys.argv[1:])
+else:
+    print "ERROR: qdel needs a task ID"
+    sys.exit()
+
+SSH_CMD = "ssh hogwarts.egr.duke.edu \"qdel %s\"" % QDEL_OPTIONS
+print SSH_CMD
+
+os.system(SSH_CMD)

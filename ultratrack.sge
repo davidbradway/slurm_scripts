@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+#$ -S /bin/bash
+#$ -o sgeout
+#$ -e sgeout
+##$ -j y
+#$ -V
+#$ -cwd
+#$ -l mem_free=2G
+##$ -l num_proc=4
+#$ -t 1-260
+#
+
+E=(0 1 2 3 4 5 10 15 20 25 30 35 40 45)
+num_seeds=20
+
+count=1
+j=1
+while [ $j -lt ${#E[*]} ]
+do
+    i=0
+    while [ $i -lt $num_seeds ]
+    do
+        seeds[$count]=$[$i]
+        moduli[$count]=${E[$j]}
+        i=$[$i+1]
+        count=$[$count+1]
+    done
+    j=$[$j+1]
+done
+
+cd "/krnlab/mlp6/roettp/hifu_kdf2/E${moduli[$SGE_TASK_ID]}kPa/"
+cp /krnlab/mlp6/roettp/hifu_kdf2/ultratrack_hifu.m .
+#sleep $((${SGE_TASK_ID}*2))m
+matlab -nojvm -nodisplay -r "ultratrack_hifu(${seeds[$SGE_TASK_ID]})"

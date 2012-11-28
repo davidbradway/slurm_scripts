@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+__author__ = "Mark Palmeri (mlp6)"
+__email__ = "mark.palmeri@duke.edu"
+__date__ = "2010-08-23"
+
+import sys
+import os
+from optparse import OptionParser
+
+def main():
+    parser = OptionParser(usage="Resubmit (default) / delete JIDs through SGE\n%prog [OPTION]...")
+    parser.add_option("-d","--delete",dest="delete",help="JID to delete after resubmission",action="store_true",default="False")
+    (opts,args) = parser.parse_args()
+
+    CMD = "qresub %s" % " ".join(args)
+    SSH_CMD = "ssh hogwarts %s" % CMD
+    print SSH_CMD
+    os.system(SSH_CMD)
+
+    if opts.delete:
+        CMD = "qdel %s" % " ".join(args)
+        SSH_CMD = "ssh hogwarts %s" % CMD
+        print SSH_CMD
+        os.system(SSH_CMD)
+
+if __name__ == "__main__":
+    main()

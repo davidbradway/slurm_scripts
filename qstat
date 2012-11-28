@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""
+Query the SGE status from the cluster.
+
+USAGE: qstat [OPTIONS]
+"""
+
+__author__ = "Mark Palmeri (mlp6)"
+__email__ = "mark.palmeri@duke.edu"
+__date__ = "2009-07-16"
+
+import sys
+import os
+import string
+
+def usage():
+    print "USAGE: qstat [OPTIONS]"
+
+USER = os.environ['USER']
+
+if len(sys.argv) > 1:
+    QSTAT_OPTIONS = string.join(sys.argv[1:])
+else:
+    #QSTAT_OPTIONS = "-u %s" % USER
+    QSTAT_OPTIONS = "-u '*'"
+
+SSH_CMD = "ssh hogwarts.bme.duke.edu \"qstat %s\"" % QSTAT_OPTIONS
+print SSH_CMD
+
+os.system(SSH_CMD)

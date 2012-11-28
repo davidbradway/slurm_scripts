@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+#$ -e sgetmp
+#$ -o sgetmp
+#$ -pe ompi 30
+#$ -R yes
+#$ -V
+#$ -cwd
+##$ -l mem_free=4G
+##$ -l num_proc=4
+#
+/usr/lib64/openmpi/1.4-gcc/bin/mpirun -mca btl tcp,sm,self -np $NSLOTS /usr/local/lstc/bin64/mpp971_s_R4.2.1_Intel_linux86-64_OpenMPI i=dyna.dyn

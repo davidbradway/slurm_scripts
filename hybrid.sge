@@ -1,0 +1,21 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -o sgetmp
+#$ -e sgetmp
+#$ -V
+#$ -R y
+#$ -pe ompi 24
+#$ -cwd
+#$ -l hostname=tonks
+
+export PATH=$PATH:/usr/local/openmpi-1.5.5/bin
+export LD_LIBRARY_PATH=/usr/local/openmpi-1.5.5/lib
+export OMP_NUM_THREADS=4
+
+date
+hostname
+export DISPLAY=
+
+mpirun -mca btl tcp,sm,self -np 6 /usr/local/lstc/bin64/ls-dyna_hyb_d_r6_1_0_74904_x64_redhat54_ifort101_sse2_openmpi151 i=ortho_xz45.dyn ncpu=4
+
+qstat -j $JOB_ID

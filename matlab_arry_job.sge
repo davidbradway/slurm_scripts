@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+#$ -S /bin/bash
+##$ -e /nefs/mlp6/sgetmp
+#$ -o sge.out
+#$ -j y
+#$ -V
+#$ -cwd
+##$ -l mem_free=4G
+##$ -l num_proc=4
+#$ -t 1-60
+#
+
+moduli=(0 3 3 3 3 3 3 3 3 3 3 6 6 6 6 6 6 6 6 6 6 9 9 9 9 9 9 9 9 9 9 12 12 12 12 12 12 12 12 12 12 15 15 15 15 15 15 15 15 15 15 18 18 18 18 18 18 18 18 18 18)
+seeds=(0 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9);
+
+cd "/krnlab/ProstateStudy/fem/E${moduli[$SGE_TASK_ID]}kPa/vf105"
+cp /krnlab/ProstateStudy/fem/ultratrack_vf105.m .
+matlab -nojvm -nodisplay -r "ultratrack_vf105(${seeds[$SGE_TASK_ID]})"
