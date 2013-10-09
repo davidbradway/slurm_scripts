@@ -14,18 +14,6 @@ __author__ = "Mark Palmeri"
 __email__ = "mark.palmeri@duke.edu"
 __date__ = "2009-11-11"
 __modified__ = "2013-01-20"
-"""
-=================================================================================
-Revision History
-=================================================================================
-[mlp6, 2009-07-13] Original code
-[mlp6, 2009-11-11] Revised to take qsub commandline options
-[mlp6, 2012-11-28] Revised to take qsub commandline options
-[mlp6, 2013-01-20] Revised to take --bash flag (Boolean) to interpret SGE job
-  file as bash syntax instead of python; broken commandline options at the same
-  time :(
-=================================================================================
-"""
 
 import os,sys
 
@@ -34,9 +22,13 @@ import argparse
 parser = argparse.ArgumentParser(description="Submit SGE jobs via qsub over ssh command tunnel from workstation",formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--bash",help="use bash command interpretation for SGE script instead of python",action="store_true",default=False)
 parser.add_argument("SGE_JOB",help="SGE job command line arguments and script file",default=None)
+parser.add_argument("SGE_TMP_DIR",help="SGE tmp directory (STDOUT/STDERR)",default='sgetmp')
+parser.add_argument("cluster_headnode",help="cluster head node",default='hogwarts.egr.duke.edu')
 args = parser.parse_args()
 
 bash = args.bash
+cluster_headnode = args.cluster_headnode
+SGE_TMP_DIR = args.SGE_TMP_DIR
 
 try:
     SGE_JOB = args.SGE_JOB
@@ -52,13 +44,6 @@ if not os.path.exists(SGE_SCRIPT):
     print "ERROR: %s script does not exist" % SGE_SCRIPT
     sys.exit()
 
-# extract the output/error directory specified in the job file (assuming they are the same!!)
-#SGE_JOB_FILE = open(SGE_JOB,'r')
-#for i in SGE_JOB_FILE:
-#    if re.match("#\$ -o",i):
-#        SGE_TMP_DIR = i.split()[-1]
-# MODIFIED ON 2012-11-28 to now just define 'sgetmp' as the common output / error directory
-SGE_TMP_DIR = "sgetmp"
 # create the SGE tmp directory if it doesn't exist
 if not os.path.isdir(SGE_TMP_DIR):
     os.mkdir(SGE_TMP_DIR)
@@ -74,4 +59,4 @@ else:
 print('EXECUTING: %s\n' % SSH_CMD)
 
 # run the ssh command
-os.system("ssh hogwarts.egr.duke.edu '%s'" % SSH_CMD)
+os.system("ssh %s '%s'" % (cluster_headnode, SSH_CMD))
