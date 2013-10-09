@@ -65,11 +65,12 @@ if not os.path.isdir(SGE_TMP_DIR):
 
 # define the ssh commandline to execute
 if bash:
-    #SSH_CMD = "cd %s; qsub -S /bin/bash -o %s -e %s -V -cwd %s %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, ' '.join(SGE_OPTIONS), SGE_JOB)
     SSH_CMD = "cd %s; qsub -S /bin/bash -o %s -e %s -V -cwd %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, SGE_JOB)
 else:
-    #SSH_CMD = "cd %s; qsub -S /usr/local/bin/python -o %s -e %s -V -cwd %s %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, ' '.join(SGE_OPTIONS), SGE_JOB)
     SSH_CMD = "cd %s; qsub -S /usr/local/bin/python -o %s -e %s -V -cwd %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, SGE_JOB)
+
+# display the command being run
+print('EXECUTING: %s\n' % SSH_CMD)
 
 # run the ssh command
 os.system("ssh hogwarts.egr.duke.edu '%s'" % SSH_CMD)
