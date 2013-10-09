@@ -13,6 +13,7 @@ USAGE: qsub job_script.sge
 __author__ = "Mark Palmeri"
 __email__ = "mark.palmeri@duke.edu"
 __date__ = "2009-11-11"
+__modified__ = "2013-01-20"
 """
 =================================================================================
 Revision History
@@ -20,25 +21,27 @@ Revision History
 [mlp6, 2009-07-13] Original code
 [mlp6, 2009-11-11] Revised to take qsub commandline options
 [mlp6, 2012-11-28] Revised to take qsub commandline options
+[mlp6, 2013-01-20] Revised to take --bash flag (Boolean) to interpret SGE job
+  file as bash syntax instead of python; broken commandline options at the same
+  time :(
 =================================================================================
 """
 
-import os
-import sys
-import re
+import os,sys
 
-def usage():
-    print "USAGE: qsub qsub_options job_script.sge"
+import argparse
 
-# make sure we have the bare minimum on the commandline
-if len(sys.argv) < 2:
-    print "ERROR: No SGE job script was specified."
-    usage()
-    sys.exit()
+parser = argparse.ArgumentParser(description="Submit SGE jobs via qsub over ssh command tunnel from workstation",formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("--bash",help="use bash command interpretation for SGE script instead of python",action="store_true",default=False)
+parser.add_argument("SGE_JOB",help="SGE job file",default=None)
+args = parser.parse_args()
 
-# pull out the SGE options and the job 
-SGE_OPTIONS = sys.argv[1:-1]
-SGE_JOB = sys.argv[-1]
+bash = args.bash
+
+try:
+    SGE_JOB = args.SGE_JOB
+except:
+    sys.exit('SGE_JOB not defined')
 
 # define the current working directory
 CWD = os.getcwd()
@@ -61,7 +64,12 @@ if not os.path.isdir(SGE_TMP_DIR):
     print "SGE output/error directory created: %s" % SGE_TMP_DIR
 
 # define the ssh commandline to execute
-SSH_CMD = "cd %s; qsub -S /bin/bash -o %s -e %s -V -cwd -m aes -M mlp6@duke.edu %s %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, ' '.join(SGE_OPTIONS), SGE_JOB)
+if bash:
+    #SSH_CMD = "cd %s; qsub -S /bin/bash -o %s -e %s -V -cwd %s %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, ' '.join(SGE_OPTIONS), SGE_JOB)
+    SSH_CMD = "cd %s; qsub -S /bin/bash -o %s -e %s -V -cwd %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, SGE_JOB)
+else:
+    #SSH_CMD = "cd %s; qsub -S /usr/local/bin/python -o %s -e %s -V -cwd %s %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, ' '.join(SGE_OPTIONS), SGE_JOB)
+    SSH_CMD = "cd %s; qsub -S /usr/local/bin/python -o %s -e %s -V -cwd %s;" % (CWD, SGE_TMP_DIR, SGE_TMP_DIR, SGE_JOB)
 
 # run the ssh command
 os.system("ssh hogwarts.egr.duke.edu '%s'" % SSH_CMD)
