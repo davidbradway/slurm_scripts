@@ -46,9 +46,10 @@ except:
 # define the current working directory
 CWD = os.getcwd()
 
-# test to make sure that the SGE job script exists
-if not os.path.exists(SGE_JOB):
-    print "ERROR: %s does not exist" % SGE_JOB
+# test to make sure that the SGE job script exists (last item of the potential multi-item string)
+SGE_SCRIPT = SGE_JOB.split()[-1]
+if not os.path.exists(SGE_SCRIPT):
+    print "ERROR: %s script does not exist" % SGE_SCRIPT
     sys.exit()
 
 # extract the output/error directory specified in the job file (assuming they are the same!!)
