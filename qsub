@@ -22,8 +22,8 @@ import argparse
 parser = argparse.ArgumentParser(description="Submit SGE jobs via qsub over ssh command tunnel from workstation",formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--bash",help="use bash command interpretation for SGE script instead of python",action="store_true",default=False)
 parser.add_argument("SGE_JOB",help="SGE job command line arguments and script file",default=None)
-parser.add_argument("SGE_TMP_DIR",help="SGE tmp directory (STDOUT/STDERR)",default='sgetmp')
-parser.add_argument("cluster_headnode",help="cluster head node",default='hogwarts.egr.duke.edu')
+parser.add_argument("--SGE_TMP_DIR",help="SGE tmp directory (STDOUT/STDERR)",default='sgetmp')
+parser.add_argument("--cluster_headnode",help="cluster head node",default='hogwarts.egr.duke.edu')
 args = parser.parse_args()
 
 bash = args.bash
