@@ -1,4 +1,3 @@
-sge
-===
-
-SGE scripts that I like to interact w/ the cluster from my workstation
+SLURM
+=====
+scripts to remotely launch SLURM commands on cluster from workstation
