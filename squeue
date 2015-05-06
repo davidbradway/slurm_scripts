@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""
+Query the SLURM status from the cluster.
+
+USAGE: squeue [OPTIONS]
+"""
+
+__author__ = "Mark Palmeri (mlp6)"
+__email__ = "mark.palmeri@duke.edu"
+__date__ = "2015-05-06"
+
+import sys
+import os
+import string
+
+def usage():
+    print "USAGE: squeue [OPTIONS]"
+
+if len(sys.argv) > 1:
+    SQUEUE_OPTIONS = string.join(sys.argv[1:])
+else:
+    SQUEUE_OPTIONS = "--all"
+
+SSH_CMD = "ssh durmstrang.egr.duke.edu \"squeue %s\"" % SQUEUE_OPTIONS
+print SSH_CMD
+
+os.system(SSH_CMD)
