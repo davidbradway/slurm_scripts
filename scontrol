@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""
+Query SLURM host configuration information on the cluster
+
+USAGE: scontrol [OPTIONS]
+"""
+
+__author__ = "Mark Palmeri (mlp6)"
+__email__ = "mark.palmeri@duke.edu"
+__date__ = "2015-05-06"
+
+import sys
+import os
+
+def usage():
+    print "USAGE: scontrol [OPTIONS]"
+
+if len(sys.argv) > 1:
+    OPTIONS = " ".join(sys.argv[1:])
+    SSH_CMD = "ssh durmstrang \"scontrol %s\"" % OPTIONS
+else:
+    SSH_CMD = "ssh durmstrang scontrol -d show nodes"
+
+print SSH_CMD
+
+os.system(SSH_CMD)
