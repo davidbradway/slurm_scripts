@@ -1,25 +1,25 @@
 #!/usr/bin/python
 """
-Query SGE host information on the cluster
+Query SLURM host information on the cluster
 
-USAGE: qhost [OPTIONS]
+USAGE: sinfo [OPTIONS]
 """
 
 __author__ = "Mark Palmeri (mlp6)"
 __email__ = "mark.palmeri@duke.edu"
-__date__ = "2010-11-01"
+__date__ = "2015-05-06"
 
 import sys
 import os
 
 def usage():
-    print "USAGE: qhost [OPTIONS]"
+    print "USAGE: sinfo [OPTIONS]"
 
 if len(sys.argv) > 1:
     OPTIONS = " ".join(sys.argv[1:])
-    SSH_CMD = "ssh hogwarts \"qhost %s\"" % OPTIONS
+    SSH_CMD = "ssh durmstrang \"sinfo %s\"" % OPTIONS
 else:
-    SSH_CMD = "ssh hogwarts \"qhost\""
+    SSH_CMD = "ssh durmstrang sinfo"
 
 print SSH_CMD
 
