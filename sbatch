@@ -24,9 +24,9 @@ p.add_argument("--python",
 p.add_argument("SLURM_JOB",
                help="SLURM job command line arguments and script file",
                default=None)
-p.add_argument("--SLURM_TMP_DIR",
-               help="SLURM tmp directory (STDOUT/STDERR)",
-               default='sgetmp')
+#p.add_argument("--SLURM_TMP_DIR",
+#               help="SLURM tmp directory (STDOUT/STDERR)",
+#               default='sgetmp')
 p.add_argument("--cluster_headnode",
                help="cluster head node",
                default='durmstrang.egr.duke.edu')
@@ -34,7 +34,7 @@ args = p.parse_args()
 
 python = args.python
 cluster_headnode = args.cluster_headnode
-SLURM_TMP_DIR = args.SLURM_TMP_DIR
+#SLURM_TMP_DIR = args.SLURM_TMP_DIR
 
 try:
     SLURM_JOB = args.SLURM_JOB
@@ -52,17 +52,18 @@ if not os.path.exists(SLURM_SCRIPT):
     sys.exit()
 
 # create the SLURM tmp directory if it doesn't exist
-if not os.path.isdir(SLURM_TMP_DIR):
-    os.mkdir(SLURM_TMP_DIR)
-    print "SLURM output/error directory created: %s" % SLURM_TMP_DIR
+#if not os.path.isdir(SLURM_TMP_DIR):
+#    os.mkdir(SLURM_TMP_DIR)
+#    print "SLURM output/error directory created: %s" % SLURM_TMP_DIR
 
 # define the ssh commandline to execute
 if python:
-    SSH_CMD = "cd %s; sbatch -S /usr/bin/python -o %s -e %s -V -cwd %s;" % \
-        (CWD, SLURM_TMP_DIR, SLURM_TMP_DIR, SLURM_JOB)
+    print('PYTHON SCRIPTS NOT SUPPORTED YET')
+    #SSH_CMD = "cd %s; sbatch -S /usr/bin/python -o %s -e %s -V -cwd %s;" % \
+    #    (CWD, SLURM_TMP_DIR, SLURM_TMP_DIR, SLURM_JOB)
 else:
-    SSH_CMD = "cd %s; sbatch -S /bin/bash -o %s -e %s -V -cwd %s;" % \
-        (CWD, SLURM_TMP_DIR, SLURM_TMP_DIR, SLURM_JOB)
+    SSH_CMD = "cd %s; sbatch %s;" % \
+        (CWD, SLURM_JOB)
 
 # display the command being run
 print('EXECUTING: %s\n' % SSH_CMD)

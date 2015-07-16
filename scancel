@@ -21,7 +21,7 @@ else:
     print "ERROR: scancel needs a task ID"
     sys.exit()
 
-SSH_CMD = "ssh durmstang.egr.duke.edu \"scancel %s\"" % QDEL_OPTIONS
+SSH_CMD = "ssh durmstrang.egr.duke.edu \"scancel %s\"" % QDEL_OPTIONS
 print SSH_CMD
 
 os.system(SSH_CMD)
