@@ -9,3 +9,10 @@ all over the place.
 migrated, and many of the example scripts definitely have not been migrated.
 If it starts with a 'q' or ends with a '.sge', then it still needs to be
 converted.*
+
+Useful SLURM URLs
+=================
+https://wiki.duke.edu/display/SCSC/SLURM+Queueing+System
+http://www.uppmax.uu.se/sge-vs-slurm-comparison
+https://rc.fas.harvard.edu/resources/documentation/convenient-slurm-commands
+http://www.ibm.com/developerworks/library/l-slurm-utility
