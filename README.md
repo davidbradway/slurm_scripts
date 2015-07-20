@@ -1,6 +1,6 @@
 SLURM scripts
 =============
-Local workstation functions to remotely launch SLURM commands on the cluster
+Local workstation functions to remotely launch [SLURM](https://computing.llnl.gov/linux/slurm/) commands on the cluster
 from the workstation.  These commands will need SSH public keys to be in place
 on the cluster and some local key manager to avoid having to enter passwords
 all over the place.
@@ -12,7 +12,7 @@ converted.*
 
 Useful SLURM URLs
 =================
-https://wiki.duke.edu/display/SCSC/SLURM+Queueing+System
-http://www.uppmax.uu.se/sge-vs-slurm-comparison
-https://rc.fas.harvard.edu/resources/documentation/convenient-slurm-commands
-http://www.ibm.com/developerworks/library/l-slurm-utility
+* https://wiki.duke.edu/display/SCSC/SLURM+Queueing+System
+* http://www.uppmax.uu.se/sge-vs-slurm-comparison
+* https://rc.fas.harvard.edu/resources/documentation/convenient-slurm-commands
+* http://www.ibm.com/developerworks/library/l-slurm-utility
